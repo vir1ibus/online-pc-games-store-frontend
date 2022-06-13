@@ -2,7 +2,7 @@ import axios from "axios";
 import {server_url} from "../App";
 
 export const api = axios.create({
-    baseURL: "http://localhost:3000/"
+    baseURL: "https://vir1ibus-shop-backend.herokuapp.com/"
 });
 
 let qs = require('qs');
