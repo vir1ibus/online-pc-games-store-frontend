@@ -36,30 +36,50 @@ export function ResultOffcanvas(props) {
             props.result.forEach((value, key) => {
                 let link;
                 let col;
-                let last_item = value[0];
                 switch (key) {
                     case "genres":
                         link = "/catalog?genre=";
                         col = 0;
-                        last_item['title'] = 'Все игры - ';
-                        last_item['link'] = '/catalog';
                         break;
                     case "publishers":
                         link = "/publisher/";
                         col = 1;
-                        last_item['username'] = 'Все издатели - ';
-                        last_item['link'] = '/publishers';
                         break;
                     case "developers":
                         link = "/developer/";
                         col = 2;
-                        last_item['username'] = 'Все разработчики - ';
-                        last_item['link'] = '/developers';
                         break;
                 }
                 table_body[col] = [];
                 value.map((value, index, array) => {
                     if(index === array.length - 1) {
+                        let last_item;
+                        switch (key) {
+                            case "genres":
+                                last_item = {
+                                    title: '',
+                                    link: ''
+                                }
+                                last_item['title'] = 'Все игры - ';
+                                last_item['link'] = '/catalog';
+                                break;
+                            case "publishers":
+                                last_item = {
+                                    username: '',
+                                    link: ''
+                                }
+                                last_item['username'] = 'Все издатели - ';
+                                last_item['link'] = '/publishers';
+                                break;
+                            case "developers":
+                                last_item = {
+                                    username: '',
+                                    link: ''
+                                }
+                                last_item['username'] = 'Все разработчики - ';
+                                last_item['link'] = '/developers';
+                                break;
+                        }
                         last_item['title'] ? last_item['title'] += value : last_item['username'] += value;
                         table_body[col].push(last_item);
                     } else {
@@ -70,27 +90,34 @@ export function ResultOffcanvas(props) {
             });
             return (
                 <>
-                    <table className="table" cellSpacing="0">
-                        <thead>
-                        <th key="genres">Жанры</th>
-                        <th key="publishers">Издатели</th>
-                        <th key="developers">Разработчики</th>
-                        </thead>
-                        <tbody>
-                        {table_body.map(value => (
-                            <tr>
-                                {value.map(value => (
-                                    <td key={value['id'] + value['link']}>
-                                        <span className="text-decoration-none text-secondary" onClick={() => navigate(value['link'])}>
-                                                {value['title'] ? value['title'] : value['username']}
-                                        </span>
-                                    </td>
-                                ))}
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
-
+                    <div className="offcanvas-header justify-content-evenly" id="search-result-header">
+                    </div>
+                    <div className="offcanvas-body row">
+                        <div className="d-flex flex-column col-4 text-center">
+                            <span className="fs-3">Жанры</span>
+                            {table_body[0].map(value => (
+                                <Link to={value['link']} className="text-decoration-none text-secondary mb-2">
+                                    {value['title'] ? value['title'] : value['username']}
+                                </Link>
+                            ))}
+                        </div>
+                        <div className="d-flex flex-column col-4 text-center">
+                            <span className="fs-3">Издатели</span>
+                            {table_body[1].map(value => (
+                                <Link to={value['link']} className="text-decoration-none text-secondary mb-2">
+                                    {value['title'] ? value['title'] : value['username']}
+                                </Link>
+                            ))}
+                        </div>
+                        <div className="d-flex flex-column col-4 text-center">
+                            <span className="fs-3">Разработчики</span>
+                            {table_body[2].map(value => (
+                                <Link to={value['link']} className="text-decoration-none text-secondary mb-2">
+                                    {value['title'] ? value['title'] : value['username']}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
                 </>
             );
         default:

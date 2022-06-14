@@ -54,17 +54,6 @@ export default function Item(props) {
         setCurrentPageReviews(currentPageReviews + 1);
     }
 
-    function inBasket(id) {
-        if(props.basket) {
-            let basketIds = props.basket.reduce((acc, currentValue) => {
-                acc.push(currentValue['id']);
-                return acc;
-            }, []);
-            return basketIds.includes(id);
-        }
-        return false;
-    }
-
     function formatDate(date) {
         let monthNames = [
             "января", "февраля", "марта",
@@ -182,7 +171,7 @@ export default function Item(props) {
                         <div className="col-xl-2 col-3">
                             {item['count'] > 0 ?
                                 (<>
-                                    {inBasket(item['id']) ?
+                                    {props.inBasket(item['id']) ?
                                         (<Link to="/basket" className="btn btn-primary add-basket-item">Добавлено</Link>) :
                                         (<button className="btn btn-primary add-basket-item" {...dataItemId} onClick={props.addBasketHandler}>В корзину</button>)}
                                 </>) :

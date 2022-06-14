@@ -2,7 +2,7 @@ import React, {Component, useEffect, useState} from "react";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import ConfirmPage from "./components/layout/ConfirmPage";
-import {Route, BrowserRouter as Router, Routes, Navigate, useNavigate} from "react-router-dom";
+import {Route, BrowserRouter as Router, Routes, Navigate} from "react-router-dom";
 import HomePage from "./components/layout/HomePage";
 import Catalog from "./components/layout/Catalog";
 import {Basket} from "./components/layout/Basket";
@@ -12,7 +12,6 @@ import Item from "./components/layout/Item";
 import Profile from "./components/layout/Profile.js";
 import Agreement from "./components/layout/Agreement";
 import SuccessPayment from "./components/layout/SuccessPayment";
-import {useAsync} from "react-async";
 
 export const image_url = api.defaults.baseURL + "image?path=/";
 
@@ -95,6 +94,17 @@ export default function App() {
         }
     }
 
+    function inBasket(id) {
+        if(basket) {
+            let basketIds = basket.reduce((arr, currentValue) => {
+                arr.push(currentValue['id']);
+                return arr;
+            }, []);
+            return basketIds.includes(id);
+        }
+        return false;
+    }
+
     return (
         <Router>
             <div className="root d-flex flex-column">
@@ -102,12 +112,12 @@ export default function App() {
                         addBasketHandler={addBasketHandler}/>
                     <Routes>
                         <Route path="/" element={<App/>}/>
-                        <Route index element={<HomePage/>}/>
+                        <Route index element={<HomePage addBasketHandler={addBasketHandler} inBasket={inBasket}/>}/>
                         <Route path="confirm/:confirmToken" element={<ConfirmPage/>}/>
-                        <Route path="catalog" element={<Catalog basket={basket} addBasketHandler={addBasketHandler}/>}/>
+                        <Route path="catalog" element={<Catalog addBasketHandler={addBasketHandler} inBasket={inBasket}/>}/>
                         <Route path="basket" element={<Basket authorizedUser={authorizedUser} basket={basket}
                                                               deleteBasketHandler={deleteBasketHandler} token={cookies.get('token')}/>}/>
-                        <Route path="game/:itemId" element={<Item basket={basket} addBasketHandler={addBasketHandler} authorizedUser={authorizedUser} token={cookies.get('token')}/>}/>
+                        <Route path="game/:itemId" element={<Item inBasket={inBasket} addBasketHandler={addBasketHandler} authorizedUser={authorizedUser} token={cookies.get('token')}/>}/>
                         <Route path="profile" element={
                             authorizedUser || authorizedUser === undefined ? <Profile authorizedUser={authorizedUser} setAuthorizedUser={setAuthorizedUser} token={cookies.get('token')} logOutHandler={logOutHandler}/> : <Navigate to="/"/>}/>
                         <Route path="document/agreement" element={<Agreement/>}/>

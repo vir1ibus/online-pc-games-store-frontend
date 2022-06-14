@@ -7,18 +7,6 @@ import {Link} from "react-router-dom";
 
 export function Card(props) {
     let item = props.item;
-    let dataItemId = { 'data-item-id' : item['id'] };
-
-    function inBasket(id) {
-        if(props.basket) {
-            let basketIds = props.basket.reduce((acc, currentValue) => {
-                acc.push(currentValue['id']);
-                return acc;
-            }, []);
-            return basketIds.includes(id);
-        }
-        return false;
-    }
 
     return (
         <div className="card text-white rounded-3" key={item['id']}>
@@ -27,9 +15,9 @@ export function Card(props) {
                 <button className="btn bg-transparent position-absolute top-0 end-0 like-item"><FontAwesomeIcon icon={faHeart}/></button>
                 {item['count'] > 0 ?
                     (<>
-                        {inBasket(item['id']) ?
+                        {props.inBasket(item['id']) ?
                             (<Link to="/basket" className="btn btn-primary add-basket-item">Добавлено</Link>) :
-                            (<button className="btn btn-primary add-basket-item" {...dataItemId} onClick={props.addBasketHandler}>В корзину</button>)}
+                            (<button className="btn btn-primary add-basket-item" data-item-id={item['id']} onClick={props.addBasketHandler}>В корзину</button>)}
                     </>) :
                     (<button className="btn btn-primary" disabled>Нет в наличии</button>)
                 }

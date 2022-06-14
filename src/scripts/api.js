@@ -1,8 +1,8 @@
 import axios from "axios";
-import {server_url} from "../App";
 
 export const api = axios.create({
     baseURL: "https://vir1ibus-shop-backend.herokuapp.com/"
+    // baseURL: "http://localhost:3000/"
 });
 
 let qs = require('qs');
@@ -416,15 +416,10 @@ export async function changePassword(token, currentPassword, newPassword) {
     })
 }
 
-export async function getCategory(token) {
+export async function getCategory() {
     return new Promise(async (resolve, reject) => {
         await api.get(
-            "/info/category",
-            {
-                headers: {
-                    Authorization: token
-                }
-            }
+            "/info/category"
         ).then(response => {
             resolve(response.data);
         }).catch(() => {
