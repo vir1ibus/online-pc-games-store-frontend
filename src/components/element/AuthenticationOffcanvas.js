@@ -9,6 +9,7 @@ export default function AuthenticationOffcanvas(props) {
     const [authenticationOffcanvas, setAuthenticationOffcanvas] = useState(null);
 
     $(document).ready(() => {
+        if($('.authentication-canvas'))
         setAuthenticationOffcanvas(Offcanvas.getOrCreateInstance($('.authentication-canvas')));
     })
 

@@ -21,7 +21,7 @@ export const image_url = api.defaults.baseURL + "image?path=/";
 export default function App() {
 
     const cookies = new Cookies();
-    const [authorizedUser, setAuthorizedUser] = useState();
+    const [authorizedUser, setAuthorizedUser] = useState(null);
     const [basket, setBasket] = useState([]);
 
     useEffect(() => {

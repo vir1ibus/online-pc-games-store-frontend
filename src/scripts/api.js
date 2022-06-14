@@ -545,3 +545,48 @@ export async function getPurchases(token) {
         })
     })
 }
+
+export async function addItem(token, item) {
+    return new Promise(async (resolve, reject) => {
+        let createItemForm = new FormData();
+        createItemForm.append('title', item.title);
+        createItemForm.append('img', item.img);
+        createItemForm.append('price', item.price);
+        createItemForm.append('discount', item.discount);
+        createItemForm.append('resultPrice', item.resultPrice);
+        createItemForm.append('languageSupport', item.languageSupport);
+        createItemForm.append('dateRealise', item.dateRealise);
+        createItemForm.append('titleDescription', item.titleDescription);
+        createItemForm.append('textDescription', item.textDescription);
+        createItemForm.append('platform', item.platform);
+        createItemForm.append('regionActivation', item.regionActivation);
+        createItemForm.append('publisher', item.publisher);
+        createItemForm.append('developer', item.developer);
+        createItemForm.append('itemType', item.itemType);
+        createItemForm.append('serviceActivation', item.serviceActivation);
+        item.screenshots.forEach(value => {
+            createItemForm.append('screenshots', value);
+        })
+        createItemForm.append('trailers', item.trailers);
+        createItemForm.append('systemRequirementId', item.systemRequirement);
+        createItemForm.append('systemRequirementValue', item.systemRequirementValue);
+        createItemForm.append('genre', item.genre);
+        createItemForm.append('activateKeys', item.activateKeys);
+        await api.post(
+            "/add/item",
+            createItemForm,
+            {
+                headers: {
+                    Authorization: token,
+                    'Content-Type' : 'multipart/form-data'
+                }
+            }
+        ).then(response => {
+            resolve(response.data);
+        }, () => {
+            reject();
+        }).catch(() => {
+            reject();
+        })
+    })
+}

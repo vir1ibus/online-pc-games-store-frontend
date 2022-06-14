@@ -2,15 +2,15 @@ import React, {useEffect, useState} from "react";
 import {Field, FieldArray, useFormik} from "formik";
 import {
     addCategory,
-    addDeveloper,
+    addDeveloper, addItem,
     addPublisher,
     deleteCategory,
     getCategory,
     getSystemRequirement
 } from "../../scripts/api";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faRubleSign, faPlus, faMinus} from "@fortawesome/free-solid-svg-icons";
 import $ from "jquery";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMinus, faPlus, faRubleSign} from "@fortawesome/free-solid-svg-icons";
 
 export default function ModeratorPanelTab(props) {
 
@@ -18,7 +18,9 @@ export default function ModeratorPanelTab(props) {
     const [errors, setErrors] = useState(new Map());
 
     useEffect(() => {
-        getCategory(props.token).then(response => setCategory(response));
+        getCategory().then(response => {
+            setCategory(response);
+        })
     }, [category])
 
     const publisherCreateForm = useFormik({
@@ -57,6 +59,7 @@ export default function ModeratorPanelTab(props) {
             img: null,
             price: 0,
             discount: 0,
+            resultPrice: 0,
             languageSupport: '',
             dateRealise: new Date().toLocaleDateString('ru-RU').split('.').reverse().join('-'),
             titleDescription: '',
@@ -68,14 +71,17 @@ export default function ModeratorPanelTab(props) {
             itemType: null,
             serviceActivation: null,
             screenshots: [],
-            trailers: [],
+            trailer: [],
             systemRequirement: [],
             systemRequirementValue: [],
-            genres: [],
+            genre: [],
             activateKeys: []
         },
         onSubmit: values => {
-            console.log(values);
+            addItem(props.token, values).then(() => {
+            }, () => {
+                itemCreateForm.setSubmitting(false);
+            });
         }
     });
 
@@ -262,6 +268,7 @@ export default function ModeratorPanelTab(props) {
                                        type="number"
                                        maxLength="5"
                                        onInput={inputHandler}
+                                       onChange={itemCreateForm.handleChange}
                                        value={Math.round(itemCreateForm.values.price - ((itemCreateForm.values.price / 100) * itemCreateForm.values.discount))}
                                        readOnly={true}/>
                                 <FontAwesomeIcon icon={faRubleSign} className="fs-5 ms-2"/>
@@ -377,7 +384,7 @@ export default function ModeratorPanelTab(props) {
                                 <div className="mb-3 form-floating">
                                     <input className="form-control"
                                            id={value['id']}
-                                           name={"systemRequirementValue." + index + ".value"}
+                                           name={"systemRequirementValue." + index}
                                            onChange={itemCreateForm.handleChange}
                                            required={true}/>
                                     <label htmlFor={value['id']}>{value['title']}</label>
@@ -392,7 +399,7 @@ export default function ModeratorPanelTab(props) {
                                 <div className="d-flex align-items-center">
                                     <input className="form-control form-control-sm" type="file"
                                            accept="image/*"
-                                           onChange={(event) => { itemCreateForm.setFieldValue("screenshot.0", event.currentTarget.files[0]); } }
+                                           onChange={(event) => { itemCreateForm.setFieldValue("screenshots." + index, event.currentTarget.files[0]); } }
                                     />
                                     <FontAwesomeIcon className="text-warning fs-5 p-2" icon={faMinus} onClick={() => {
                                         itemCreateForm.values.screenshots = itemCreateForm.values.screenshots.filter((value, index1) => {
@@ -428,10 +435,13 @@ export default function ModeratorPanelTab(props) {
                                   }}/>
                         <span className="form-text">Ключи активации необходимо вводить с разделителем (пробел, запятая, точка с запятой, перенос строки)</span>
                     </div>
+                    <div>
+                        <button className="btn btn-primary" type="submit" onClick={() => { console.log(itemCreateForm.values) }}>Добавить игру</button>
+                    </div>
+                    {itemCreateForm.isSubmitting && (
+                        <span className="text-success">Продукт успешно добавлен.</span>
+                    )}
                 </form>
-                <div>
-                    <button className="btn btn-primary" type="submit" onClick={() => { console.log(itemCreateForm.values) }}>Добавить игру</button>
-                </div>
             </div>
         </div>
     );
