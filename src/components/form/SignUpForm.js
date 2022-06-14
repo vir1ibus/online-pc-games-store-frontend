@@ -73,14 +73,12 @@ function SignUpForm() {
                 resetForm();
             }, error => {
                 setSuccess(false);
-                error = JSON.parse(JSON.stringify(error));
-                if('username' in error) {
+                if(error.some(values => values['code'] === 'username')) {
                     signUnForm.setFieldError("duplicate_login", "Логин уже занят.");
                 }
-                if('email' in error) {
+                if(error.some(values => values['code'] === 'email')) {
                     signUnForm.setFieldError("duplicate_email", "Почта уже зарегистрирована.");
                 }
-
             });
         }
     });
@@ -93,7 +91,7 @@ function SignUpForm() {
                 ("d-flex flex-column align-content-center justify-content-center is-valid") :
                 ("d-flex flex-column align-content-center justify-content-center")}
                   onSubmit={signUnForm.handleSubmit}>
-                <div className="form-control rounded-pill form-check mt-2 mb-2">
+                <div className="rounded-pill form-check mt-2 mb-2">
                     <input
                         id="login"
                         name="login"
@@ -109,9 +107,8 @@ function SignUpForm() {
                         {signUnForm.errors['duplicate_login'] ?
                             (signUnForm.errors['duplicate_login']) : ("Некорректный логин.")}
                     </div>
-
                 </div>
-                <div className="form-control rounded-pill form-check mb-2">
+                <div className="rounded-pill form-check mb-2">
                     <input
                         id="email"
                         name="email"
@@ -127,7 +124,7 @@ function SignUpForm() {
                             (signUnForm.errors['duplicate_email']) : ("Некорректная почта.")}
                     </div>
                 </div>
-                <div className="form-control rounded-pill form-check mb-2">
+                <div className="rounded-pill form-check mb-2">
                     <div className="d-flex align-items-center">
                         <input
                             id="regPassword"
@@ -148,7 +145,7 @@ function SignUpForm() {
                         Пароль не соответствует требованиям.
                     </div>
                 </div>
-                <div className="form-control rounded-pill form-check mb-2">
+                <div className="rounded-pill form-check mb-2">
                     <div className="d-flex align-items-center">
                         <input
                             id="retryPassword"

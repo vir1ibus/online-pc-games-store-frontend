@@ -12,6 +12,9 @@ import Item from "./components/layout/Item";
 import Profile from "./components/layout/Profile.js";
 import Agreement from "./components/layout/Agreement";
 import SuccessPayment from "./components/layout/SuccessPayment";
+import NotFound from "./components/layout/NotFound";
+import Publisher from "./components/layout/Publisher";
+import Developer from "./components/layout/Developer";
 
 export const image_url = api.defaults.baseURL + "image?path=/";
 
@@ -118,11 +121,19 @@ export default function App() {
                         <Route path="basket" element={<Basket authorizedUser={authorizedUser} basket={basket}
                                                               deleteBasketHandler={deleteBasketHandler} token={cookies.get('token')}/>}/>
                         <Route path="game/:itemId" element={<Item inBasket={inBasket} addBasketHandler={addBasketHandler} authorizedUser={authorizedUser} token={cookies.get('token')}/>}/>
-                        <Route path="profile" element={
-                            authorizedUser || authorizedUser === undefined ? <Profile authorizedUser={authorizedUser} setAuthorizedUser={setAuthorizedUser} token={cookies.get('token')} logOutHandler={logOutHandler}/> : <Navigate to="/"/>}/>
+                        <Route path="publisher/:publisherId" element={<Publisher inBasket={inBasket} addBasketHandler={addBasketHandler} authorizedUser={authorizedUser} token={cookies.get('token')}/>}/>
+                        <Route path="developer/:developerId" element={<Developer inBasket={inBasket} addBasketHandler={addBasketHandler} authorizedUser={authorizedUser} token={cookies.get('token')}/>}/>
+                        <Route path="profile" element={authorizedUser || authorizedUser === undefined ?
+                            <Profile authorizedUser={authorizedUser}
+                                     setAuthorizedUser={setAuthorizedUser}
+                                     token={cookies.get('token')}
+                                     logOutHandler={logOutHandler}
+                                     inBasket={inBasket}
+                                     addBasketHandler={addBasketHandler}/> :
+                            <Navigate to="/"/>}/>
                         <Route path="document/agreement" element={<Agreement/>}/>
                         <Route path="/payment/success" element={<SuccessPayment token={cookies.get('token')}/>}/>
-                        <Route path="*" element={<HomePage/>}/>
+                        <Route path="*" element={<NotFound/>}/>
                     </Routes>
                 <Footer/>
             </div>

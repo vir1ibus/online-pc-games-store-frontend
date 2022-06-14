@@ -569,3 +569,18 @@ svg {
 #price, #discount, #resultPrice {
     width: 5em;
 }
+
+.profile-image-container {
+    width: 10em;
+    height: 10em;
+    background-color: white;
+}
+
+.profile-image {
+    width: 100%;
+    object-fit: contain;
+}
+
+.wait-paid {
+    cursor: pointer;
+}

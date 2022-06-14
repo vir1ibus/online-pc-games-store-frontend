@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import ProfileDataTab from "../element/ProfileDataTab";
 import ModeratorPanelTab from "../element/ModeratorPanelTab";
 import ProfileInfoTab from "../element/ProfileInfoTab";
+import PurchaseHistoryTab from "../element/PurchaseHistoryTab";
 
 const $ = require('jquery');
 
@@ -24,6 +25,11 @@ export default function Profile(props) {
                             aria-controls="profile-user-data"
                             aria-selected="false">Личные данные
                     </button>
+                    <button className="nav-link" id="purchase-history-tab" data-bs-toggle="pill"
+                            data-bs-target="#purchase-history" type="button" role="tab"
+                            aria-controls="purchase-history"
+                            aria-selected="false">История заказов
+                    </button>
                     {props.authorizedUser['role'].some(role => role['name'] === 'moderator') && (
                         <button className="nav-link" id="moderator-panel-tab" data-bs-toggle="pill"
                                 data-bs-target="#moderator-panel" type="button" role="tab"
@@ -41,6 +47,10 @@ export default function Profile(props) {
                     <div className="tab-pane fade" id="profile-user-data" role="tabpanel"
                          aria-labelledby="profile-user-data-tab">
                         <ProfileDataTab token={props.token} authorizedUser={props.authorizedUser} setAuthorizedUser={props.setAuthorizedUser}/>
+                    </div>
+                    <div className="tab-pane fade" id="purchase-history" role="tabpanel"
+                         aria-labelledby="purchase-history-tab">
+                        <PurchaseHistoryTab token={props.token} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
                     </div>
                     {props.authorizedUser['role'].some(role => role['name'] === 'moderator') && (
                         <div className="tab-pane fade" id="moderator-panel" role="tabpanel"

@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export const api = axios.create({
-    // baseURL: "https://vir1ibus-shop-backend.herokuapp.com/"
-    baseURL: "http://localhost:3000/"
+    baseURL: "https://vir1ibus-shop-backend.herokuapp.com/"
+    // baseURL: "http://localhost:3000/"
 });
 
 let qs = require('qs');
@@ -493,6 +493,51 @@ export async function deleteAccount(token) {
             }
         ).then(response => {
             resolve();
+        }, () => {
+            reject();
+        }).catch(() => {
+            reject();
+        })
+    })
+}
+
+export async function getPublisher(id) {
+    return new Promise(async (resolve, reject) => {
+        await api.get(
+            "/publisher/" + id
+        ).then(response => {
+            resolve(response.data);
+        }, () => {
+            reject();
+        }).catch(() => {
+            reject();
+        })
+    })
+}
+
+export async function getDeveloper(id, token) {
+    return new Promise(async (resolve, reject) => {
+        await api.get(
+            "/developer/" + id
+        ).then(response => {
+            resolve(response.data);
+        }, () => {
+            reject();
+        }).catch(() => {
+            reject();
+        })
+    })
+}
+
+export async function getPurchases(token) {
+    return new Promise(async (resolve, reject) => {
+        await api.get(
+            "/payment/purchases",
+            {
+                headers: { Authorization: token }
+            }
+        ).then(response => {
+            resolve(response.data);
         }, () => {
             reject();
         }).catch(() => {

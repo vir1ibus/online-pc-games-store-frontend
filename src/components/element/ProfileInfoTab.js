@@ -7,7 +7,7 @@ export default function ProfileInfoTab(props) {
         if(props.authorizedUser) {
             let count = 0;
             props.authorizedUser.purchases.map(value => {
-                count += value['items'].length;
+                if(value['paid']) count += value['items'].length;
             });
             setCountPurchasedGames(count);
         }

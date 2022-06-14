@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Field, useFormik} from "formik";
+import {Field, FieldArray, useFormik} from "formik";
 import {
     addCategory,
     addDeveloper,
@@ -70,23 +70,30 @@ export default function ModeratorPanelTab(props) {
             screenshots: [],
             trailers: [],
             systemRequirement: [],
+            systemRequirementValue: [],
             genres: [],
             activateKeys: []
         },
         onSubmit: values => {
-
+            console.log(values);
         }
     });
 
-    // useEffect(() => {
-    //     if(itemCreateForm.values.systemRequirement.length > 0) {
-    //         itemCreateForm.values.systemRequirement.map((value, index) => {
-    //             if(!Object.is(value)) {
-    //
-    //             }
-    //         })
-    //     }
-    // }, [itemCreateForm.values.systemRequirement])
+    useEffect(() => {
+        if(itemCreateForm.values.systemRequirement.length > itemCreateForm.values.systemRequirementValue.length) {
+            itemCreateForm.values.systemRequirement.map((value, index) => {
+                getSystemRequirement(value).then(response => {
+                    itemCreateForm.values.systemRequirementValue[index] = response;
+                })
+            })
+        } else if(itemCreateForm.values.systemRequirement.length < itemCreateForm.values.systemRequirementValue.length){
+            itemCreateForm.values.systemRequirementValue = itemCreateForm.values.systemRequirementValue.filter(value => {
+                return itemCreateForm.values.systemRequirement.some(value1 => {
+                    return value1 == value['id']
+                });
+            });
+        }
+    }, [itemCreateForm.values.systemRequirement])
 
     function inputHandler(event) {
         if(event.currentTarget.value.length > event.currentTarget.maxLength) {
@@ -135,20 +142,23 @@ export default function ModeratorPanelTab(props) {
                 return 'Сервис активации';
             case "regionActivation":
                 return 'Регион активации';
+            case "publisher":
+                return 'Издатель';
+            case "developer":
+                return 'Разработчик';
         }
     }
 
     function renderInputType(key) {
         switch (key) {
+            case "systemRequirement":
             case "genre":
                 return 'checkbox';
-            case "itemType":
-                return 'radio';
-            case "systemRequirement":
-                return 'checkbox';
-            case "serviceActivation":
-                return 'radio';
             case "regionActivation":
+            case "itemType":
+            case "serviceActivation":
+            case "publisher":
+            case "developer":
                 return 'radio';
         }
     }
@@ -302,7 +312,7 @@ export default function ModeratorPanelTab(props) {
                                value={itemCreateForm.values.platform} required={true}/>
                         <label htmlFor="platform">Платформа</label>
                     </div>
-                    <div className="mb-3 d-flex gap-4">
+                    <div className="mb-3 d-flex gap-4 flex-wrap">
                         {category && Object.keys(category).map(key => (
                             <div className="dropdown">
                                 <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -321,25 +331,35 @@ export default function ModeratorPanelTab(props) {
                                                            value={value['id']}/>
                                                     <label className="form-check-label w-auto" htmlFor={key + "-" + value['id']}>{value['title']}</label>
                                                 </div>
-                                                <a className="btn btn-primary ms-4 flex-grow-0" onClick={deleteCategoryHandler} data-category-type={key} data-id={value['id']}>
-                                                    <FontAwesomeIcon icon={faMinus}/>
-                                                </a>
+                                                {
+                                                    key !== 'publisher' && key !== 'developer' && (
+                                                        <a className="btn btn-primary ms-4 flex-grow-0" onClick={deleteCategoryHandler} data-category-type={key} data-id={value['id']}>
+                                                            <FontAwesomeIcon icon={faMinus}/>
+                                                        </a>
+                                                    )
+                                                }
+
                                             </div>
                                         </li>
                                     ))}
-                                    <li>
-                                        <div className="dropdown-item" role="group">
-                                            <form className="d-flex align-items-center" onSubmit={(event) => event.preventDefault()}>
-                                                <input className="form-control"
-                                                       name={key + "Add"}
-                                                       placeholder="Наименование"
-                                                       required={true}/>
-                                                <a className="btn btn-primary ms-2" onClick={addCategoryHandler} data-category-type={key}>
-                                                    <FontAwesomeIcon icon={faPlus}/>
-                                                </a>
-                                            </form>
-                                        </div>
-                                    </li>
+                                    {
+                                        key !== 'publisher' && key !== 'developer' && (
+                                            <li>
+                                                <div className="dropdown-item" role="group">
+                                                    <form className="d-flex align-items-center" onSubmit={(event) => event.preventDefault()}>
+                                                        <input className="form-control"
+                                                               name={key + "Add"}
+                                                               placeholder="Наименование"
+                                                               required={true}/>
+                                                        <a className="btn btn-primary ms-2" onClick={addCategoryHandler} data-category-type={key}>
+                                                            <FontAwesomeIcon icon={faPlus}/>
+                                                        </a>
+                                                    </form>
+                                                </div>
+                                            </li>
+                                        )
+                                    }
+
                                     {errors.get(key) &&
                                         (<li>
                                             <div className="text-center">
@@ -353,23 +373,64 @@ export default function ModeratorPanelTab(props) {
                     {itemCreateForm.values.systemRequirement.length > 0 && (
                         <div className="mb-3">
                             <label className="form-label">Системные характеристики</label>
-                            {itemCreateForm.values.systemRequirement.map(value => {
-                                getSystemRequirement(value).then(response => (
-                                    <div className="mb-3">
-                                        <input className="form-control"
-                                               id={response['id']}
-                                               name="systemRequirement"
-                                               required={true}/>
-                                        <label htmlFor={response['id']}>{response['title']}</label>
-                                    </div>
-                                ))
-                            }
-                            )}
+                            {itemCreateForm.values.systemRequirementValue.length > 0 && itemCreateForm.values.systemRequirementValue.map((value, index) => (
+                                <div className="mb-3 form-floating">
+                                    <input className="form-control"
+                                           id={value['id']}
+                                           name={"systemRequirementValue." + index + ".value"}
+                                           onChange={itemCreateForm.handleChange}
+                                           required={true}/>
+                                    <label htmlFor={value['id']}>{value['title']}</label>
+                                </div>
+                            ))}
                         </div>
                     )}
+                    <div className="mb-3">
+                        <label className="form-label">Скриншоты</label>
+                        {itemCreateForm.values.screenshots.length > 0 &&
+                            itemCreateForm.values.screenshots.map((value, index, array) => (
+                                <div className="d-flex align-items-center">
+                                    <input className="form-control form-control-sm" type="file"
+                                           accept="image/*"
+                                           onChange={(event) => { itemCreateForm.setFieldValue("screenshot.0", event.currentTarget.files[0]); } }
+                                    />
+                                    <FontAwesomeIcon className="text-warning fs-5 p-2" icon={faMinus} onClick={() => {
+                                        itemCreateForm.values.screenshots = itemCreateForm.values.screenshots.filter((value, index1) => {
+                                            return index1 !== index;
+                                        })
+                                    }}/>
+                                </div>
+                            ))}
+                        <div className="d-flex align-items-center">
+                            <FontAwesomeIcon className="text-success fs-5 p-2" icon={faPlus}
+                                             onClick={() => {
+                                                 itemCreateForm.values.screenshots.push(new File([], "", undefined))
+                                             }}/>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Ключи активации</label>
+                        <textarea className="form-control"
+                                  name="activateKeys"
+                                  onChange={(event) => {
+                                      let str = event.currentTarget.value;
+                                      str = str.replaceAll('\n', ' ');
+                                      str = str.replaceAll(';', ' ');
+                                      str = str.replaceAll(',', ' ');
+                                      str = str.split(' ');
+                                      str = str.filter(value => {
+                                          return value.length > 0;
+                                      });
+                                      str = str.filter((element, index) => {
+                                          return str.indexOf(element) === index;
+                                      })
+                                      itemCreateForm.values.activateKeys = str;
+                                  }}/>
+                        <span className="form-text">Ключи активации необходимо вводить с разделителем (пробел, запятая, точка с запятой, перенос строки)</span>
+                    </div>
                 </form>
                 <div>
-                    <button className="btn btn-primary" type="submit">Добавить игру</button>
+                    <button className="btn btn-primary" type="submit" onClick={() => { console.log(itemCreateForm.values) }}>Добавить игру</button>
                 </div>
             </div>
         </div>
