@@ -1,16 +1,19 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye as faSolidEye, faEyeSlash as faSolidEyeSlash} from "@fortawesome/free-solid-svg-icons";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {useFormik} from "formik";
-import {changeEmail, changePassword, changeUsername} from "../../scripts/api";
+import {changeEmail, changePassword, changeUsername, deleteAccount} from "../../scripts/api";
 import $ from "jquery";
 
 export default function ProfileDataTab(props) {
 
+    let navigate = useNavigate();
+
     const [successChangeProfileData, setSuccessChangeProfileData] = useState([]);
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
 
 
     useEffect(() => {
@@ -97,6 +100,12 @@ export default function ProfileDataTab(props) {
             }
         }
     })
+
+    function deleteAccountHandler(event) {
+        deleteAccount(props.token).then(() => {
+            navigate("/");
+        })
+    }
 
     return (
         <div className="profile-content bg-dark border border-2 border-secondary p-4">
@@ -195,6 +204,22 @@ export default function ProfileDataTab(props) {
                         className="text-secondary">Пользовательского соглашения.</Link></span>
                 </div>
             </form>
+            <div className="d-flex align-items-center mt-3 justify-content-evenly">
+                <button className="btn btn-danger rounded-pill w-auto"
+                        type="submit" disabled={!deleteConfirm}
+                        onClick={deleteAccountHandler}>Удалить аккаунт
+                </button>
+                <div className="form-check form-switch row">
+                    <input className="form-check-input d-block" type="checkbox" role="switch"
+                           id="confirmDeleteAccount"
+                           name="confirmDeleteAccount"
+                           checked={deleteConfirm}
+                           onChange={(event) => { setDeleteConfirm(!deleteConfirm)}}/>
+                    <label className="form-check-label" htmlFor="confirmDeleteAccount">
+                        Удаление аккаунта безвозвратная процедура, данные восстановлению не подлежат
+                    </label>
+                </div>
+            </div>
         </div>
     )
 }

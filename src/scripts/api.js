@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: "https://vir1ibus-shop-backend.herokuapp.com/"
-    // baseURL: "http://localhost:3000/"
+    // baseURL: "https://vir1ibus-shop-backend.herokuapp.com/"
+    baseURL: "http://localhost:3000/"
 });
 
 let qs = require('qs');
@@ -416,6 +416,18 @@ export async function changePassword(token, currentPassword, newPassword) {
     })
 }
 
+export async function getSystemRequirement(id) {
+    return new Promise(async (resolve, reject) => {
+        await api.get(
+            "/systemRequirement/" + id
+        ).then(response => {
+            resolve(response.data);
+        }).catch(() => {
+            reject([]);
+        })
+    })
+}
+
 export async function getCategory() {
     return new Promise(async (resolve, reject) => {
         await api.get(
@@ -455,6 +467,25 @@ export async function deleteCategory(token, categoryType, id) {
     return new Promise(async (resolve, reject) => {
         await api.delete(
             "/delete/" + categoryType + "/" + id,
+            {
+                headers: {
+                    Authorization: token
+                }
+            }
+        ).then(response => {
+            resolve();
+        }, () => {
+            reject();
+        }).catch(() => {
+            reject();
+        })
+    })
+}
+
+export async function deleteAccount(token) {
+    return new Promise(async (resolve, reject) => {
+        await api.delete(
+            "/authorization/delete/",
             {
                 headers: {
                     Authorization: token

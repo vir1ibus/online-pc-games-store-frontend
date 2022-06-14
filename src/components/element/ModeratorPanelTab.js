@@ -1,6 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {Field, useFormik} from "formik";
-import {addCategory, addDeveloper, addPublisher, deleteCategory, getCategory} from "../../scripts/api";
+import {
+    addCategory,
+    addDeveloper,
+    addPublisher,
+    deleteCategory,
+    getCategory,
+    getSystemRequirement
+} from "../../scripts/api";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRubleSign, faPlus, faMinus} from "@fortawesome/free-solid-svg-icons";
 import $ from "jquery";
@@ -70,6 +77,16 @@ export default function ModeratorPanelTab(props) {
 
         }
     });
+
+    // useEffect(() => {
+    //     if(itemCreateForm.values.systemRequirement.length > 0) {
+    //         itemCreateForm.values.systemRequirement.map((value, index) => {
+    //             if(!Object.is(value)) {
+    //
+    //             }
+    //         })
+    //     }
+    // }, [itemCreateForm.values.systemRequirement])
 
     function inputHandler(event) {
         if(event.currentTarget.value.length > event.currentTarget.maxLength) {
@@ -291,7 +308,7 @@ export default function ModeratorPanelTab(props) {
                                 <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                     {renderCategoryName(key)}
                                 </button>
-                                <ul className="dropdown-menu dropdown-menu-dark bg-dark">
+                                <ul className="dropdown-menu dropdown-menu-dark bg-dark border-secondary border-1">
                                     {category[key].map(value => (
                                         <li key={value['id']}>
                                             <div className="dropdown-item form-switch btn-group align-items-center justify-content-between" role="group">
@@ -333,6 +350,23 @@ export default function ModeratorPanelTab(props) {
                             </div>
                         ))}
                     </div>
+                    {itemCreateForm.values.systemRequirement.length > 0 && (
+                        <div className="mb-3">
+                            <label className="form-label">Системные характеристики</label>
+                            {itemCreateForm.values.systemRequirement.map(value => {
+                                getSystemRequirement(value).then(response => (
+                                    <div className="mb-3">
+                                        <input className="form-control"
+                                               id={response['id']}
+                                               name="systemRequirement"
+                                               required={true}/>
+                                        <label htmlFor={response['id']}>{response['title']}</label>
+                                    </div>
+                                ))
+                            }
+                            )}
+                        </div>
+                    )}
                 </form>
                 <div>
                     <button className="btn btn-primary" type="submit">Добавить игру</button>

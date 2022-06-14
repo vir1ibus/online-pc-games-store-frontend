@@ -40,7 +40,7 @@ export default function Profile(props) {
                     </div>
                     <div className="tab-pane fade" id="profile-user-data" role="tabpanel"
                          aria-labelledby="profile-user-data-tab">
-                        <ProfileDataTab authorizedUser={props.authorizedUser} setAuthorizedUser={props.setAuthorizedUser}/>
+                        <ProfileDataTab token={props.token} authorizedUser={props.authorizedUser} setAuthorizedUser={props.setAuthorizedUser}/>
                     </div>
                     {props.authorizedUser['role'].some(role => role['name'] === 'moderator') && (
                         <div className="tab-pane fade" id="moderator-panel" role="tabpanel"
