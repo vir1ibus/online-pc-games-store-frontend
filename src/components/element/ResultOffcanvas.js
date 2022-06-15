@@ -1,10 +1,6 @@
 import {Link, useNavigate} from "react-router-dom";
 import React from "react";
 import {Card} from "./Card";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHeart} from "@fortawesome/free-regular-svg-icons";
-import {image_url} from "../../App";
-import {faRubleSign} from "@fortawesome/free-solid-svg-icons";
 
 export function ResultOffcanvas(props) {
     let navigate = useNavigate();
@@ -19,7 +15,7 @@ export function ResultOffcanvas(props) {
                     <div className="offcanvas-body">
                         <div className="row gap-5">
                             {props.result['items'] && props.result.items.map(value => (
-                                <Card item={value} basket={props.basket} addBasketHandler={props.addBasketHandler}/>
+                                <Card item={value} basket={props.basket} addBasketHandler={props.addBasketHandler} inBasket={props.inBasket}/>
                             ))}
                             {props.result['items'] && props.result.total_pages > 1 && (
                                 <Link to={"/catalog?search=" + props.search} className="card text-white rounded-3 d-flex justify-content-center align-items-center">

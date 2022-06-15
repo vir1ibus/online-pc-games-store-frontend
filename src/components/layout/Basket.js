@@ -80,6 +80,5 @@ export function Basket(props) {
                 </div>
             </div>
         </main>
-
     );
 }

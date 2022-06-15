@@ -46,18 +46,7 @@ export default function PurchaseHistoryTab(props) {
                         <div className="overflow-auto w-100">
                             <div className="row flex-nowrap gap-3 m-3">
                                 {value['items'].map(item => (
-                                    <>
-                                        <Card item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
-                                        <Card item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
-                                        <Card item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
-                                        <Card item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
-                                        <Card item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
-                                        <Card item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
-                                        <Card item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
-                                        <Card item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
-                                        <Card item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
-                                        <Card item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
-                                    </>
+                                    <Card item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
                                 ))}
                             </div>
                         </div>
@@ -72,6 +61,4 @@ export default function PurchaseHistoryTab(props) {
             </div>
         )
     }
-
-
 }

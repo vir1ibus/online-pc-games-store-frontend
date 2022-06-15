@@ -112,7 +112,7 @@ export default function App() {
         <Router>
             <div className="root d-flex flex-column">
                 <Header authorizationHandler={setAuthorizedUser} authorizedUser={authorizedUser} basket={basket}
-                        addBasketHandler={addBasketHandler}/>
+                        addBasketHandler={addBasketHandler} inBasket={inBasket}/>
                     <Routes>
                         <Route path="/" element={<App/>}/>
                         <Route index element={<HomePage addBasketHandler={addBasketHandler} inBasket={inBasket}/>}/>

@@ -145,7 +145,7 @@ export default function Catalog(props) {
         <main id="content">
             {searchParams.get('search') ?
                 <h1 className="catalog-header">
-                    По запросу <span style={searchRequestHighlight}>{searchParams.get('search')}</span> найдено: <span style={searchRequestHighlight}>{items.length ? items.length - 1 : items.length}</span> </h1> :
+                    По запросу <span style={searchRequestHighlight}>{searchParams.get('search')}</span> найдено: <span style={searchRequestHighlight}>{items.length}</span> </h1> :
                 <h1 className="catalog-header">Каталог игр: <span style={searchRequestHighlight}>{totalItems}</span></h1>}
             {
                 category !== null && (
@@ -199,7 +199,7 @@ export default function Catalog(props) {
                         </div>
                         <div className="dropdown d-flex justify-content-center w-auto">
                             <select className="form-select bg-primary w-auto" onChange={serviceActivationHandler}>
-                                <option name="service-activation" value="all" selected={!searchParams.get('service-activation')}>Регион активации</option>
+                                <option name="service-activation" value="all" selected={!searchParams.get('service-activation')}>Сервис активации</option>
                                 {category['serviceActivation'].map(value => (
                                     <option name="service-activation" value={value['id']} selected={searchParams.get('service-activation') == value['id']}>{value['title']}</option>
                                 ))}

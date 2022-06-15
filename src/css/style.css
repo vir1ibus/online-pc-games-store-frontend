@@ -292,7 +292,9 @@ svg {
     z-index: 1000;
 }
 
-
+.card-img {
+    object-fit: contain;
+}
 
 .card-fade:hover {
     opacity: 1;

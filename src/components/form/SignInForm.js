@@ -52,7 +52,7 @@ function SignInForm(props) {
                 ("d-flex flex-column align-content-center justify-content-center is-invalid") :
                 ("d-flex flex-column align-content-center justify-content-center")}
                   onSubmit={signInForm.handleSubmit}>
-                <div className="form-control rounded-pill mt-2 mb-2">
+                <div className="mt-2 mb-2">
                     <input
                         name="login"
                         placeholder="Логин"
@@ -61,7 +61,7 @@ function SignInForm(props) {
                         value={signInForm.values.login}
                         required/>
                 </div>
-                <div className="form-control rounded-pill mb-2 d-flex align-items-center">
+                <div className="mb-2 d-flex align-items-center">
                     <input name="password"
                            placeholder="Пароль"
                            className="form-control rounded-pill"

@@ -140,6 +140,7 @@ export default function Header(props) {
                         result={result}
                         basket={props.basket}
                         addBasketHandler={props.addBasketHandler}
+                        inBasket={props.inBasket}
                         offcanvas={Offcanvas.getOrCreateInstance($(".result-canvas"))}/>
                 }
             </div>
