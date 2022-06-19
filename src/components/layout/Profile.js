@@ -4,6 +4,7 @@ import ProfileDataTab from "../element/ProfileDataTab";
 import ModeratorPanelTab from "../element/ModeratorPanelTab";
 import ProfileInfoTab from "../element/ProfileInfoTab";
 import PurchaseHistoryTab from "../element/PurchaseHistoryTab";
+import AdminPanelTab from "../element/AdminPanelTab";
 
 const $ = require('jquery');
 
@@ -37,6 +38,13 @@ export default function Profile(props) {
                                 aria-selected="false">Панель модератора
                         </button>
                     )}
+                    {props.authorizedUser['role'].some(role => role['name'] === 'admin') && (
+                        <button className="nav-link" id="admin-panel-tab" data-bs-toggle="pill"
+                                data-bs-target="#admin-panel" type="button" role="tab"
+                                aria-controls="admin-panel"
+                                aria-selected="false">Панель администратора
+                        </button>
+                    )}
                     <button className="btn btn-primary mt-5" onClick={ () => { props.logOutHandler(); navigator('/'); } }>Выйти</button>
                 </div>
                 <div className="tab-content col-8">
@@ -62,6 +70,12 @@ export default function Profile(props) {
                         <div className="tab-pane fade" id="moderator-panel" role="tabpanel"
                              aria-labelledby="moderator-panel-tab">
                             <ModeratorPanelTab token={props.token}/>
+                        </div>
+                    )}
+                    {props.authorizedUser['role'].some(role => role['name'] === 'admin') && (
+                        <div className="tab-pane fade" id="admin-panel" role="tabpanel"
+                             aria-labelledby="admin-panel-tab">
+                            <AdminPanelTab token={props.token}/>
                         </div>
                     )}
                 </div>

@@ -764,3 +764,56 @@ export async function getLiked(token) {
         })
     });
 }
+
+export async function getMinimalUsers(token) {
+    return new Promise(async (resolve) => {
+        await api.get(
+            "/get/users/minimal",
+            {
+                headers: { Authorization: token }
+            }
+        ).then(response => {
+            resolve(response.data);
+        })
+    });
+}
+
+export async function getUser(token, id) {
+    return new Promise(async (resolve, reject) => {
+        await api.get(
+            "/get/user/" + id,
+            {
+                headers: { Authorization: token }
+            }
+        ).then(response => {
+            resolve(response.data);
+        });
+    });
+}
+
+export async function getRoles(token) {
+    return new Promise(async (resolve, reject) => {
+        await api.get(
+            "/get/roles",
+            {
+                headers: { Authorization: token }
+            }
+        ).then(response => {
+            resolve(response.data);
+        });
+    });
+}
+
+export async function saveUser(token, user) {
+    return new Promise(async (resolve) => {
+        await api.post(
+            "/save/user",
+            user,
+            {
+                headers: { Authorization: token }
+            }
+        ).then(response => {
+            resolve(response.data);
+        });
+    });
+}
