@@ -47,7 +47,7 @@ export default function PurchaseHistoryTab(props) {
                             <div className="row flex-nowrap gap-3 m-3">
                                 {value['items'].map(item => (
                                     <ItemCard
-                                        item={value}
+                                        item={item}
                                         inBasket={props.inBasket}
                                         addBasketHandler={props.addBasketHandler}
                                         inLiked={props.inLiked}
