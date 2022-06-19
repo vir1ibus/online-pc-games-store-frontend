@@ -213,7 +213,10 @@ export default function App() {
                                      token={cookies.get('token')}
                                      logOutHandler={logOutHandler}
                                      inBasket={inBasket}
-                                     addBasketHandler={addBasketHandler}/> :
+                                     addBasketHandler={addBasketHandler}
+                                     inLiked={inLiked}
+                                     addLiked={addLikedHandler}
+                                     deleteLiked={deleteLikedHandler}/> :
                             <Navigate to="/"/>}/>
                         <Route path="document/agreement" element={<Agreement/>}/>
                         <Route path="/payment/success" element={<SuccessPayment token={cookies.get('token')}/>}/>

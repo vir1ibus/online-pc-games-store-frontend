@@ -46,7 +46,13 @@ export default function PurchaseHistoryTab(props) {
                         <div className="overflow-auto w-100">
                             <div className="row flex-nowrap gap-3 m-3">
                                 {value['items'].map(item => (
-                                    <ItemCard item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
+                                    <ItemCard
+                                        item={value}
+                                        inBasket={props.inBasket}
+                                        addBasketHandler={props.addBasketHandler}
+                                        inLiked={props.inLiked}
+                                        addLiked={props.addLiked}
+                                        deleteLiked={props.deleteLiked}/>
                                 ))}
                             </div>
                         </div>

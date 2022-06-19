@@ -50,7 +50,13 @@ export default function Profile(props) {
                     </div>
                     <div className="tab-pane fade" id="purchase-history" role="tabpanel"
                          aria-labelledby="purchase-history-tab">
-                        <PurchaseHistoryTab token={props.token} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
+                        <PurchaseHistoryTab
+                            token={props.token}
+                            inBasket={props.inBasket}
+                            addBasketHandler={props.addBasketHandler}
+                            inLiked={props.inLiked}
+                            addLiked={props.addLiked}
+                            deleteLiked={props.deleteLiked}/>
                     </div>
                     {props.authorizedUser['role'].some(role => role['name'] === 'moderator') && (
                         <div className="tab-pane fade" id="moderator-panel" role="tabpanel"
