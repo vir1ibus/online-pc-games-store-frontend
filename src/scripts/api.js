@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: "https://vir1ibus-shop-backend.herokuapp.com/"
-    // baseURL: "http://localhost:3000/"
+    // baseURL: "https://vir1ibus-shop-backend.herokuapp.com/"
+    baseURL: "http://localhost:3000/"
 });
 
 let qs = require('qs');
@@ -583,6 +583,128 @@ export async function addItem(token, item) {
             }
         ).then(response => {
             resolve(response.data);
+        }, () => {
+            reject();
+        }).catch(() => {
+            reject();
+        })
+    })
+}
+
+export async function reSendConfirmationCode(username) {
+    return new Promise(async (resolve, reject) => {
+        await api.put(
+            "/authorization/send/confirmation-code/" + username
+        ).then(() => {
+            resolve();
+        }, () => {
+            reject();
+        }).catch(() => {
+            reject();
+        })
+    })
+}
+
+export async function getCarousel() {
+    return new Promise(async (resolve, reject) => {
+        await api.get(
+            "/get/carousel"
+        ).then(response => {
+            resolve(response.data);
+        }, () => {
+            reject();
+        }).catch(() => {
+            reject();
+        })
+    })
+}
+
+export async function addCarousel(token, itemId, screenshotId) {
+    return new Promise(async (resolve, reject) => {
+        const formData = new FormData();
+        formData.append("itemId", itemId);
+        formData.append("screenshotId", screenshotId);
+        await api.post(
+            "/add/carousel/",
+            formData,
+            {
+                headers: { Authorization: token }
+            }
+        ).then(response => {
+            resolve(response.data);
+        }, () => {
+            reject();
+        }).catch(() => {
+            reject();
+        })
+    })
+}
+
+export async function setCarousel(token, id, itemId, screenshotId) {
+    return new Promise(async (resolve, reject) => {
+        const formData = new FormData();
+        formData.append("id", id);
+        formData.append("itemId", itemId);
+        formData.append("screenshotId", screenshotId);
+        await api.post(
+            "/set/carousel/",
+            formData,
+            {
+                headers: { Authorization: token }
+            }
+        ).then(response => {
+            resolve(response.data);
+        }, () => {
+            reject();
+        }).catch(() => {
+            reject();
+        })
+    })
+}
+
+export async function deleteCarousel(token, id) {
+    return new Promise(async (resolve, reject) => {
+        await api.delete(
+            "/delete/carousel/" + id,
+            {
+                headers: { Authorization: token }
+            }
+        ).then(() => {
+            resolve();
+        }, () => {
+            reject();
+        }).catch(() => {
+            reject();
+        })
+    })
+}
+
+export async function getSelectMinimalItems(token) {
+    return new Promise(async (resolve, reject) => {
+        await api.get(
+            "/get/item/minimal",
+            {
+                headers: { Authorization: token }
+            }
+        ).then(response => {
+            resolve(response.data);
+        }, () => {
+            reject();
+        }).catch(() => {
+            reject();
+        })
+    })
+}
+
+export async function deleteItem(token, id) {
+    return new Promise(async (resolve, reject) => {
+        await api.delete(
+            "/delete/item/" + id,
+            {
+                headers: { Authorization: token }
+            }
+        ).then(() => {
+            resolve();
         }, () => {
             reject();
         }).catch(() => {

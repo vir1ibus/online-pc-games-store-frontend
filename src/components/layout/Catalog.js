@@ -1,6 +1,6 @@
 import {useSearchParams} from "react-router-dom";
 import {findItemsByFilter, getCategory} from "../../scripts/api";
-import {Card} from "../element/Card";
+import {ItemCard} from "../element/ItemCard";
 import React, {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRubleSign} from "@fortawesome/free-solid-svg-icons";
@@ -46,7 +46,6 @@ export default function Catalog(props) {
                 arr.push(...response['items']);
                 setItems(arr);
             }
-
         });
     }, [currentPage]);
 
@@ -210,7 +209,7 @@ export default function Catalog(props) {
             }
             <div className="row gap-5 justify-content-center">
                 {items.map((value) => (
-                    <Card item={value} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
+                    <ItemCard item={value} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
                 ))}
                 { totalPages > 1 && currentPage < totalPages - 1 &&
                     (<div className="row justify-content-center align-items-center">

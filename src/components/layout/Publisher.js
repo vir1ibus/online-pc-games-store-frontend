@@ -2,7 +2,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {getItem, getPublisher} from "../../scripts/api";
 import {image_url} from "../../App";
-import {Card} from "../element/Card";
+import {ItemCard} from "../element/ItemCard";
 
 export default function Publisher(props) {
 
@@ -33,7 +33,7 @@ export default function Publisher(props) {
                     <span className="fs-4 mb-5">Игры от {publisher['title']} <span className="text-secondary">{publisher['count_items']}</span></span>
                     <div className="d-flex flex-wrap w-100 gap-4 justify-content-center">
                         {publisher['items'].map(value => (
-                            <Card item={value} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
+                            <ItemCard item={value} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
                         ))}
                     </div>
                 </div>

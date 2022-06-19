@@ -1,13 +1,22 @@
-import {Link, useParams} from "react-router-dom";
+import {Link, useParams, Navigate} from "react-router-dom";
 import React, { useEffect, useState} from "react";
-import {addReview, deleteReview, findItemsByFilter, getItem, getReviews} from "../../scripts/api";
+import {addReview, deleteItem, deleteReview, findItemsByFilter, getItem, getReviews} from "../../scripts/api";
 import {image_url} from "../../App";
-import { faRubleSign, faStar as faSolidStar, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import {
+    faRubleSign,
+    faStar as faSolidStar,
+    faPaperPlane,
+    faXmark,
+    faCross,
+    faPencilSquare
+} from "@fortawesome/free-solid-svg-icons";
 import { faStar as faRegularStar } from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Collapse} from "bootstrap";
+import {Collapse, Modal} from "bootstrap";
 import {useFormik} from "formik";
 import Review from "../element/Review";
+import CarouselModal from "../modal/CarouselModal";
+import ItemModal from "../modal/ItemModal";
 
 let $ = require( "jquery" );
 
@@ -20,6 +29,7 @@ export default function Item(props) {
     const [totalPagesReviews, setTotalPagesReviews] = useState(0);
     const [currentPageReviews, setCurrentPageReviews] = useState(0);
     const [reviewStars, setReviewStars] = useState(0);
+    const [itemModal, setItemModal] = useState(false);
 
     const inStock = { color: '#3cf281'};
     const outOfStock = { color: '#e44c55' };
@@ -52,6 +62,10 @@ export default function Item(props) {
 
     function loadNextPageReviews(event) {
         setCurrentPageReviews(currentPageReviews + 1);
+    }
+
+    function editItemHandler(event) {
+        setItemModal(!itemModal);
     }
 
     function formatDate(date) {
@@ -108,6 +122,11 @@ export default function Item(props) {
     if(item) {
         return (
             <main id="content" className="row text-white" key={item['id']}>
+                {itemModal &&
+                    (<ItemModal
+                        token={props.token}
+                        item={item}
+                        setItem={setItem}/>)}
                 <div className="col-3" id="item-left">
                     <img src={ image_url + '/item/' + item['img'] } className="item-img"/>
                     <div className="item-detail mt-3">
@@ -160,7 +179,21 @@ export default function Item(props) {
                     </div>
                 </div>
                 <div className="col-7" id="item-right">
-                    <h1 className="mb-3">Купить {item['title']}</h1>
+                    <div className="mb-3 d-flex align-items-center gap-3">
+                        <h1>Купить {item['title']}</h1>
+                        {props.authorizedUser['role'].some(role => role['name'] === 'moderator') && (
+                            <>
+                                <FontAwesomeIcon
+                                    className="text-secondary fs-1"
+                                    icon={faPencilSquare}
+                                    style={{ cursor: 'pointer'}}
+                                    onClick={editItemHandler}/>
+                                <FontAwesomeIcon className="text-secondary fs-1" icon={faXmark} style={{ cursor: 'pointer'}}
+                                onClick={() => {
+                                    deleteItem(props.token, item['id']).then(() => (<Navigate to="/" replace/>))
+                                }}/>
+                            </>)}
+                    </div>
                     <div className="row mb-3">
                         {item['count'] > 0 ?
                             (<span className="col-3 col-xl-2"><span style={inStock}>●</span> В наличии</span>) :
@@ -272,21 +305,12 @@ export default function Item(props) {
                                                 <div className="embed-responsive embed-responsive-16by9">
                                                     <iframe className={index ? "carousel-item embed-responsive-item" : "carousel-item active embed-responsive-item" }
                                                             src={value['path']}
+                                                            style={{ minHeight: "37em" }}
                                                             allowFullScreen/>
                                                 </div>
                                             )
                                         })}
                                     </div>
-                                    <button className="carousel-control-prev" type="button"
-                                            data-bs-target="#trailer-carousel" data-bs-slide="prev">
-                                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span className="visually-hidden">Предыдущий</span>
-                                    </button>
-                                    <button className="carousel-control-next" type="button"
-                                            data-bs-target="#trailer-carousel" data-bs-slide="next">
-                                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span className="visually-hidden">Следующий</span>
-                                    </button>
                                 </div>
                             </div>
                         </div>

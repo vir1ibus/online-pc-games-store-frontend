@@ -586,3 +586,45 @@ svg {
 .wait-paid {
     cursor: pointer;
 }
+
+
+
+.card-publisher {
+    height: auto !important;
+}
+
+.card-publisher .card-img-top {
+    object-fit: contain;
+    padding: 1em;
+}
+
+.card-carousel {
+    border-radius: 1em;
+}
+
+.carousel-screenshot-picker, .carousel-screenshot-picker-fade {
+    border-radius: 1.1em;
+}
+
+.carousel-screenshot-picker-fade:hover {
+    opacity: 1;
+}
+
+.carousel-screenshot-picker-fade {
+    opacity: 0;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+}
+
+.carousel-screenshot-picker-fade input {
+    position: absolute;
+    right: 0.5em;
+    width: 2em;
+    height: 2em;
+}

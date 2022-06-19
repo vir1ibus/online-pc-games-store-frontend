@@ -5,7 +5,7 @@ import {faHeart} from "@fortawesome/free-regular-svg-icons";
 import React from "react";
 import {Link} from "react-router-dom";
 
-export function Card(props) {
+export function ItemCard(props) {
     let item = props.item;
 
     return (

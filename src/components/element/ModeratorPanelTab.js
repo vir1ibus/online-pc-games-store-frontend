@@ -3,19 +3,40 @@ import {Field, FieldArray, useFormik} from "formik";
 import {
     addCategory,
     addDeveloper, addItem,
-    addPublisher,
-    deleteCategory,
+    addPublisher, deleteCarousel,
+    deleteCategory, getCarousel,
     getCategory,
     getSystemRequirement
 } from "../../scripts/api";
 import $ from "jquery";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMinus, faPlus, faRubleSign} from "@fortawesome/free-solid-svg-icons";
+import {
+    faCross,
+    faMinus,
+    faPencilSquare,
+    faPlus,
+    faRubleSign,
+    faXmark,
+    faXmarksLines
+} from "@fortawesome/free-solid-svg-icons";
+import {image_url} from "../../App";
+import {Link} from "react-router-dom";
+import CarouselModal from "../modal/CarouselModal";
+import {Modal} from "bootstrap";
 
 export default function ModeratorPanelTab(props) {
 
     const [category, setCategory] = useState(null);
     const [errors, setErrors] = useState(new Map());
+    const [carousel, setCarousel] = useState([]);
+    const [carouselModal, setCarouselModal] = useState(false);
+    const [carouselModalType, setCarouselModalType] = useState(null);
+
+    useEffect(() => {
+        getCarousel().then(response => {
+            setCarousel(response);
+        });
+    }, [carousel])
 
     useEffect(() => {
         getCategory().then(response => {
@@ -136,6 +157,29 @@ export default function ModeratorPanelTab(props) {
         });
     }
 
+    function deleteCarouselItemHandler(event) {
+        let id = event.currentTarget.getAttribute("data-id");
+        deleteCarousel(props.token, id).then(() => {
+            let arr = [...carousel];
+            arr.filter(value => {
+                return value['id'] != id;
+            })
+            setCarousel(arr);
+        })
+    }
+
+    function editCarouselItemHandler(event) {
+        setCarouselModal(!carouselModal);
+        setCarouselModalType(carousel.find(value => {
+            return value['id'] == event.currentTarget.getAttribute('data-id');
+        }));
+    }
+
+    function addCarouselHandler() {
+        setCarouselModal(!carouselModal);
+        setCarouselModalType('add');
+    }
+
     function renderCategoryName(key) {
         switch (key) {
             case "genre":
@@ -171,6 +215,33 @@ export default function ModeratorPanelTab(props) {
 
     return (
         <div className="profile-content bg-dark border border-2 border-secondary p-4">
+            <div className="border-bottom border-2 border-secondary pb-3 mb-3">
+                <h2>Промо-баннеры</h2>
+                <div className="row flex-nowrap overflow-auto gap-3" id="carousel">
+                    {carousel.length > 0 && carousel.map(carouselItem => (
+                        <div className="card card-carousel text-center col-5">
+                            <img className="card-img-top"
+                                 src={image_url + "item/screenshot/" + carouselItem['screenshot']['path']}/>
+                            <div className="card-body">
+                                <Link to={"/game/" + carouselItem['item']['id']} className="text-secondary fs-5">{carouselItem['item']['title']}</Link>
+                            </div>
+                            <div className="d-flex justify-content-end pb-2 gap-2 pe-2 text-secondary">
+                                {carousel.length > 1 && (<FontAwesomeIcon icon={faXmark} style={{ cursor: 'pointer'}} className="fs-4" data-id={carouselItem['id']} onClick={deleteCarouselItemHandler}/>)}
+                                <FontAwesomeIcon icon={faPencilSquare} style={{ cursor: 'pointer'}} className="fs-4" data-id={carouselItem['id']} onClick={editCarouselItemHandler}/>
+                            </div>
+                        </div>
+                    ))}
+                    <div className="card card-carousel d-flex justify-content-center align-items-center col-5" style={{ cursor: 'pointer'}} onClick={addCarouselHandler}>
+                        <FontAwesomeIcon icon={faPlus} className="fs-1 text-success"/>
+                    </div>
+                    {carouselModal &&
+                        (<CarouselModal
+                            type={carouselModalType}
+                            token={props.token}
+                            carousel={carousel}
+                            setCarousel={setCarousel}/>)}
+                </div>
+            </div>
             <div className="border-bottom border-2 border-secondary pb-3 mb-3">
                 <h2>Добавление издателя</h2>
                 <form onSubmit={publisherCreateForm.handleSubmit}>

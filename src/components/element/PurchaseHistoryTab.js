@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {getPurchases} from "../../scripts/api";
-import {Card} from "./Card";
+import {ItemCard} from "./ItemCard";
 import {Link} from "react-router-dom";
 
 export default function PurchaseHistoryTab(props) {
@@ -46,7 +46,7 @@ export default function PurchaseHistoryTab(props) {
                         <div className="overflow-auto w-100">
                             <div className="row flex-nowrap gap-3 m-3">
                                 {value['items'].map(item => (
-                                    <Card item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
+                                    <ItemCard item={item} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
                                 ))}
                             </div>
                         </div>

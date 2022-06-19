@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { signIn } from "../../scripts/api";
+import {reSendConfirmationCode, signIn} from "../../scripts/api";
 import {useCookies} from "react-cookie";
 import Cookies from "universal-cookie/lib";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -37,14 +37,36 @@ function SignInForm(props) {
                 props.authenticationOffcanvas.hide();
             }).catch(error => {
                 if('username' || 'password' in error) {
-                    signInForm.setFieldError("authentication", "Неправильный логин или пароль.");
+                    signInForm.setFieldError("authentication", "invalid-login-password");
                 }
                 if('account' in error) {
-                    signInForm.setFieldError("authentication", "Аккаунт не активирован.")
+                    signInForm.setFieldError("authentication", "account-not-activated")
                 }
             });
         }
     });
+
+    function renderErrorAuthentication(type) {
+        switch (type) {
+            case "invalid-login-password":
+                return <>Неправильный логин или пароль.</>;
+            case "account-not-activated":
+                return <>
+                    Аккаунт не активирован.<br/>
+                    <a className="text-decoration-none text-secondary" style={{ 'cursor' : 'pointer' }} onClick={() => reSendConfirmationCodeHandler(signInForm.values.login)}>Отправить ссылку активации ещё раз.</a>
+                </>
+        }
+    }
+
+    function reSendConfirmationCodeHandler(username) {
+        reSendConfirmationCode(username).then(() => {
+            signInForm.setFieldError("authentication", null);
+        }, () => {
+            signInForm.setFieldError("authentication", "Ошибка сервера.");
+        }).catch(() => {
+            signInForm.setFieldError("authentication", "Ошибка сервера.");
+        })
+    }
 
     return (
         <div className="form-check">
@@ -76,7 +98,7 @@ function SignInForm(props) {
                 <button className="btn btn-primary rounded-pill" type="submit">Вход</button>
             </form>
             <div className="text-center invalid-feedback">
-                {signInForm.errors['authentication']}
+                {renderErrorAuthentication(signInForm.errors['authentication'])}
             </div>
         </div>
     );

@@ -106,7 +106,7 @@ export default function Header(props) {
 
     return(
         <>
-            <header id="header-top" className="row align-content-center justify-content-evenly justify-content-lg-between m-3 fixed-top">
+            <header id="header-top" className="row align-content-center justify-content-between m-3 fixed-top">
                 <div className="row col-xl-1 col-2 justify-content-center">
                     <a href="/" className="w-auto">
                         <img className="logo" src={process.env.PUBLIC_URL + '/img/logo.png'} alt="logo"/>
