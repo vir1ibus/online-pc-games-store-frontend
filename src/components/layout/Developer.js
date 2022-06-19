@@ -32,7 +32,13 @@ export default function Developer(props) {
                     <span className="fs-4 mb-5">Игры от {developer['title']} <span className="text-secondary">{developer['count_items']}</span></span>
                     <div className="d-flex flex-wrap w-100 gap-4 justify-content-center">
                         {developer['items'].map(value => (
-                            <ItemCard item={value} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
+                            <ItemCard
+                                item={value}
+                                inBasket={props.inBasket}
+                                addBasketHandler={props.addBasketHandler}
+                                inLiked={props.inLiked}
+                                addLiked={props.addLiked}
+                                deleteLiked={props.deleteLiked}/>
                         ))}
                     </div>
                 </div>

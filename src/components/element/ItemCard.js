@@ -1,6 +1,6 @@
 import {image_url} from "../../App";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faRubleSign} from "@fortawesome/free-solid-svg-icons";
+import {faRubleSign, faHeart as faSolidHeart} from "@fortawesome/free-solid-svg-icons";
 import {faHeart} from "@fortawesome/free-regular-svg-icons";
 import React from "react";
 import {Link} from "react-router-dom";
@@ -12,7 +12,16 @@ export function ItemCard(props) {
         <div className="card text-white rounded-3" key={item['id']}>
             <div className="card-fade d-flex justify-content-center align-items-center">
                 <a className="card-fade-link" href={"/game/" + item['id']}/>
-                <button className="btn bg-transparent position-absolute top-0 end-0 like-item"><FontAwesomeIcon icon={faHeart}/></button>
+                {props.inLiked(item['id']) ?
+                    (<button
+                        className="btn bg-transparent position-absolute top-0 end-0 like-item" data-item-id={item['id']} onClick={props.deleteLiked}>
+                        <FontAwesomeIcon icon={faSolidHeart}/>
+                    </button>) :
+                    (<button
+                        className="btn bg-transparent position-absolute top-0 end-0 like-item" data-item-id={item['id']} onClick={props.addLiked}>
+                        <FontAwesomeIcon icon={faHeart}/>
+                    </button>)}
+
                 {item['count'] > 0 ?
                     (<>
                         {props.inBasket(item['id']) ?

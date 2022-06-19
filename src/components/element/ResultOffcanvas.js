@@ -15,7 +15,13 @@ export function ResultOffcanvas(props) {
                     <div className="offcanvas-body">
                         <div className="row gap-5">
                             {props.result['items'] && props.result.items.map(value => (
-                                <ItemCard item={value} basket={props.basket} addBasketHandler={props.addBasketHandler} inBasket={props.inBasket}/>
+                                <ItemCard
+                                    item={value}
+                                    inBasket={props.inBasket}
+                                    addBasketHandler={props.addBasketHandler}
+                                    inLiked={props.inLiked}
+                                    addLiked={props.addLiked}
+                                    deleteLiked={props.deleteLiked}/>
                             ))}
                             {props.result['items'] && props.result.total_pages > 1 && (
                                 <Link to={"/catalog?search=" + props.search} className="card text-white rounded-3 d-flex justify-content-center align-items-center">

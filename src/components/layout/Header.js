@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {findCatalog, findItemsByFilter, isAuthenticated} from "../../scripts/api";
+import {addLiked, deleteLiked, findCatalog, findItemsByFilter, isAuthenticated} from "../../scripts/api";
 import { Offcanvas } from 'bootstrap';
 import {faBars, faArrowRightToBracket} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -141,6 +141,9 @@ export default function Header(props) {
                         basket={props.basket}
                         addBasketHandler={props.addBasketHandler}
                         inBasket={props.inBasket}
+                        inLiked={props.inLiked}
+                        addLiked={props.addLiked}
+                        deleteLiked={props.deleteLiked}
                         offcanvas={Offcanvas.getOrCreateInstance($(".result-canvas"))}/>
                 }
             </div>

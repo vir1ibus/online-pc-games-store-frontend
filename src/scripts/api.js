@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: "https://vir1ibus-shop-backend.herokuapp.com/"
-    // baseURL: "http://localhost:3000/"
+    // baseURL: "https://vir1ibus-shop-backend.herokuapp.com/"
+    baseURL: "http://localhost:3000/"
 });
 
 let qs = require('qs');
@@ -711,4 +711,56 @@ export async function deleteItem(token, id) {
             reject();
         })
     })
+}
+
+export async function addLiked(id, token) {
+    return new Promise(async (resolve) => {
+        await api.put(
+            "/liked/" + id,
+            {},
+            {
+                headers: { Authorization: token }
+            }
+        ).then(response => {
+            if(response.status === 200){
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        })
+    });
+}
+
+export async function deleteLiked(id, token) {
+    return new Promise(async (resolve) => {
+        await api.delete(
+            "/liked/" + id,
+            {
+                headers: { Authorization: token }
+            }
+        ).then(response => {
+            if(response.status === 200){
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        })
+    });
+}
+
+export async function getLiked(token) {
+    return new Promise(async (resolve) => {
+        await api.get(
+            "/liked",
+            {
+                headers: { Authorization: token }
+            }
+        ).then(response => {
+            if(response.status === 200){
+                resolve(response.data);
+            } else {
+                resolve([]);
+            }
+        })
+    });
 }

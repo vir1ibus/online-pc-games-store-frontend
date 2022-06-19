@@ -209,7 +209,13 @@ export default function Catalog(props) {
             }
             <div className="row gap-5 justify-content-center">
                 {items.map((value) => (
-                    <ItemCard item={value} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
+                    <ItemCard
+                        item={value}
+                        inBasket={props.inBasket}
+                        addBasketHandler={props.addBasketHandler}
+                        inLiked={props.inLiked}
+                        addLiked={props.addLiked}
+                        deleteLiked={props.deleteLiked}/>
                 ))}
                 { totalPages > 1 && currentPage < totalPages - 1 &&
                     (<div className="row justify-content-center align-items-center">

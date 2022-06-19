@@ -6,7 +6,16 @@ import {Route, BrowserRouter as Router, Routes, Navigate} from "react-router-dom
 import HomePage from "./components/layout/HomePage";
 import Catalog from "./components/layout/Catalog";
 import {Basket} from "./components/layout/Basket";
-import {addBasket, api, deleteBasket, getBasket, getItemForBasket, isAuthenticated, logOut} from "./scripts/api";
+import {
+    addBasket,
+    addLiked,
+    api,
+    deleteBasket, deleteLiked,
+    getBasket,
+    getItemForBasket, getLiked,
+    isAuthenticated,
+    logOut
+} from "./scripts/api";
 import Cookies from "universal-cookie/lib";
 import Item from "./components/layout/Item";
 import Profile from "./components/layout/Profile.js";
@@ -17,6 +26,10 @@ import Publisher from "./components/layout/Publisher";
 import Developer from "./components/layout/Developer";
 import Publishers from "./components/layout/Publishers";
 import Developers from "./components/layout/Developers";
+import Liked from "./components/layout/Liked";
+import {Offcanvas} from "bootstrap";
+import $ from "jquery";
+import {ItemCard} from "./components/element/ItemCard";
 
 export const image_url = api.defaults.baseURL + "image?path=/";
 
@@ -25,6 +38,7 @@ export default function App() {
     const cookies = new Cookies();
     const [authorizedUser, setAuthorizedUser] = useState(null);
     const [basket, setBasket] = useState([]);
+    const [liked, setLiked] = useState([]);
 
     useEffect(() => {
         let token = cookies.get('token');
@@ -43,6 +57,7 @@ export default function App() {
                     localStorage.removeItem("basket");
                 }
                 setBasket(response['basket']['items'])
+                setLiked(response['liked']['items'])
             }).catch(error => {
                 setAuthorizedUser(null);
                 cookies.remove("token");
@@ -110,22 +125,87 @@ export default function App() {
         return false;
     }
 
+    function inLiked(id) {
+        if(liked) {
+            let likedIds = liked.reduce((arr, currentValue) => {
+                arr.push(currentValue['id']);
+                return arr;
+            }, []);
+            return likedIds.includes(id);
+        }
+        return false;
+    }
+
+    function addLikedHandler(event) {
+        let token = cookies.get('token');
+        if(token)
+        addLiked(event.currentTarget.getAttribute('data-item-id'), token).then(() => {
+            getLiked(token).then(response => {
+                setLiked(response['items']);
+            });
+        });
+    }
+
+    function deleteLikedHandler(event) {
+        let token = cookies.get("token");
+        if(token) {
+            let id = event.currentTarget.getAttribute('data-item-id');
+            deleteLiked(id, cookies.get("token")).then(() => {
+                let arr = [...liked];
+                arr = arr.filter(elem => (elem['id'] !== id));
+                setLiked(arr);
+            })
+        }
+    }
+
     return (
         <Router>
             <div className="root d-flex flex-column">
                 <Header authorizationHandler={setAuthorizedUser} authorizedUser={authorizedUser} basket={basket}
-                        addBasketHandler={addBasketHandler} inBasket={inBasket}/>
+                        addBasketHandler={addBasketHandler} inBasket={inBasket} inLiked={inLiked} addLiked={addLikedHandler}
+                        deleteLiked={deleteLikedHandler}/>
                     <Routes>
                         <Route path="/" element={<App/>}/>
-                        <Route index element={<HomePage addBasketHandler={addBasketHandler} inBasket={inBasket}/>}/>
+                        <Route index element={<HomePage
+                            addBasketHandler={addBasketHandler}
+                            inBasket={inBasket}
+                            inLiked={inLiked}
+                            addLiked={addLikedHandler}
+                            deleteLiked={deleteLikedHandler}/>}/>
                         <Route path="confirm/:confirmToken" element={<ConfirmPage/>}/>
-                        <Route path="catalog" element={<Catalog addBasketHandler={addBasketHandler} inBasket={inBasket}/>}/>
+                        <Route path="catalog" element={<Catalog
+                            addBasketHandler={addBasketHandler}
+                            inBasket={inBasket}
+                            inLiked={inLiked}
+                            addLiked={addLikedHandler}
+                            deleteLiked={deleteLikedHandler} />}/>
                         <Route path="basket" element={<Basket authorizedUser={authorizedUser} basket={basket}
                                                               deleteBasketHandler={deleteBasketHandler} token={cookies.get('token')}/>}/>
+                        <Route path="liked" element={<Liked
+                            liked={liked}
+                            setLiked={setLiked}
+                            deleteLiked={deleteLikedHandler}
+                            inBasket={inBasket}
+                            addBasketHandler={addBasketHandler}
+                            inLiked={inLiked}
+                            authorizedUser={authorizedUser}/>}/>
                         <Route path="game/:itemId" element={<Item inBasket={inBasket} addBasketHandler={addBasketHandler} authorizedUser={authorizedUser} token={cookies.get('token')}/>}/>
-                        <Route path="publisher/:publisherId" element={<Publisher inBasket={inBasket} addBasketHandler={addBasketHandler} authorizedUser={authorizedUser} token={cookies.get('token')}/>}/>
+                        <Route path="publisher/:publisherId" element={<Publisher
+                            inBasket={inBasket}
+                            addBasketHandler={addBasketHandler}
+                            inLiked={inLiked}
+                            addLiked={addLikedHandler}
+                            deleteLiked={deleteLikedHandler}
+                            authorizedUser={authorizedUser}
+                            token={cookies.get('token')}/>}/>
                         <Route path="publishers" element={<Publishers/>}/>
-                        <Route path="developer/:developerId" element={<Developer inBasket={inBasket} addBasketHandler={addBasketHandler} authorizedUser={authorizedUser} token={cookies.get('token')}/>}/>
+                        <Route path="developer/:developerId" element={<Developer
+                            inBasket={inBasket}
+                            addBasketHandler={addBasketHandler}
+                            inLiked={inLiked}
+                            addLiked={addLikedHandler}
+                            deleteLiked={deleteLikedHandler}
+                            authorizedUser={authorizedUser} token={cookies.get('token')}/>}/>
                         <Route path="developers" element={<Developers/>}/>
                         <Route path="profile" element={authorizedUser || authorizedUser === undefined ?
                             <Profile authorizedUser={authorizedUser}

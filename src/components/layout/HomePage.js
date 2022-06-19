@@ -74,7 +74,13 @@ export default function HomePage(props) {
                             <div className="row flex-nowrap mb-3">
                                 {items.length > 0 && items.map(value => (
                                     <div className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-10 mt-3">
-                                        <ItemCard item={value} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
+                                        <ItemCard
+                                            item={value}
+                                            inBasket={props.inBasket}
+                                            addBasketHandler={props.addBasketHandler}
+                                            inLiked={props.inLiked}
+                                            addLiked={props.addLiked}
+                                            deleteLiked={props.deleteLiked}/>
                                     </div>
                                 ))}
                             </div>
@@ -84,7 +90,13 @@ export default function HomePage(props) {
                             <div className="row flex-nowrap mb-3">
                                 {items.length > 0 && items.map(value => (
                                     <div className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-10 mt-3">
-                                        <ItemCard item={value} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
+                                        <ItemCard
+                                            item={value}
+                                            inBasket={props.inBasket}
+                                            addBasketHandler={props.addBasketHandler}
+                                            inLiked={props.inLiked}
+                                            addLiked={props.addLiked}
+                                            deleteLiked={props.deleteLiked}/>
                                     </div>
                                 ))}
                             </div>
@@ -94,7 +106,13 @@ export default function HomePage(props) {
                             <div className="row flex-nowrap mb-3">
                                 {items.length > 0 && items.map(value => (
                                     <div className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-10 mt-3">
-                                        <ItemCard item={value} inBasket={props.inBasket} addBasketHandler={props.addBasketHandler}/>
+                                        <ItemCard
+                                            item={value}
+                                            inBasket={props.inBasket}
+                                            addBasketHandler={props.addBasketHandler}
+                                            inLiked={props.inLiked}
+                                            addLiked={props.addLiked}
+                                            deleteLiked={props.deleteLiked}/>
                                     </div>
                                 ))}
                             </div>
