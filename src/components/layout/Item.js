@@ -181,7 +181,7 @@ export default function Item(props) {
                 <div className="col-7" id="item-right">
                     <div className="mb-3 d-flex align-items-center gap-3">
                         <h1>Купить {item['title']}</h1>
-                        {props.authorizedUser['role'].some(role => role['name'] === 'moderator') && (
+                        {props.authorizedUser && props.authorizedUser['role'].some(role => role['name'] === 'moderator') && (
                             <>
                                 <FontAwesomeIcon
                                     className="text-secondary fs-1"
